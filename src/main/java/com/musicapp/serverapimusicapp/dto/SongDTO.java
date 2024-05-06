@@ -1,40 +1,16 @@
-package com.musicapp.serverapimusicapp.entity;
+package com.musicapp.serverapimusicapp.dto;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
 
-@Entity
-@Table(name = "song")
-public class SongEntity extends BaseEntity{
-    @Column
+public class SongDTO extends BaseDTO<SongDTO>{
     private String title;
-    @Column
     private String description;
-    @Column
     private String url_thumbnail;
-    @Column
     private String url_audio;
-    @ManyToOne
-    @JoinColumn(name = "artist_id")
-    private ArtistEntity artist;
-    @ManyToOne
-    @JoinColumn(name = "genre_id")
-    private GenreEntity genre;
-
-    public GenreEntity getGenre() {
-        return genre;
-    }
-
-    public void setGenre(GenreEntity genre) {
-        this.genre = genre;
-    }
-
-    public ArtistEntity getArtist() {
-        return artist;
-    }
-
-    public void setArtist(ArtistEntity artist) {
-        this.artist = artist;
-    }
+//    private Long genreID;
+//    private Long artistID;
+    private GenreDTO genreDTO;
+    private ArtistDTO artistDTO;
 
     public String getTitle() {
         return title;
@@ -66,5 +42,21 @@ public class SongEntity extends BaseEntity{
 
     public void setUrl_audio(String url_audio) {
         this.url_audio = url_audio;
+    }
+
+    public GenreDTO getGenreDTO() {
+        return genreDTO;
+    }
+
+    public void setGenreDTO(GenreDTO genreDTO) {
+        this.genreDTO = genreDTO;
+    }
+
+    public ArtistDTO getArtistDTO() {
+        return artistDTO;
+    }
+
+    public void setArtistDTO(ArtistDTO artistDTO) {
+        this.artistDTO = artistDTO;
     }
 }

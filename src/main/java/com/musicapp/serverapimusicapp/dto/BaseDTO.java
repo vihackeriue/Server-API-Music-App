@@ -1,33 +1,31 @@
-package com.musicapp.serverapimusicapp.entity;
+package com.musicapp.serverapimusicapp.dto;
 
-import jakarta.persistence.*;
-import org.springframework.data.annotation.CreatedBy;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedBy;
-import org.springframework.data.annotation.LastModifiedDate;
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-@MappedSuperclass
-@EntityListeners(AuditingEntityListener.class)
-public abstract class BaseEntity {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+import java.util.ArrayList;
+import java.util.List;
+
+public class BaseDTO<T> {
     private Long id;
-    @Column(name = "createdBy")
-    @CreatedBy
     private String createdBy;
-    @Column(name = "createDate")
-    @CreatedDate
     private String createDate;
-    @Column(name = "updatedBy")
-    @LastModifiedBy
     private String updatedBy;
-    @Column(name = "updatedDate")
-    @LastModifiedDate
     private String updatedDate;
+    private List<T> listResult = new ArrayList<>();
+
+    public List<T> getListResult() {
+        return listResult;
+    }
+
+    public void setListResult(List<T> listResult) {
+        this.listResult = listResult;
+    }
 
     public Long getId() {
         return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getCreatedBy() {

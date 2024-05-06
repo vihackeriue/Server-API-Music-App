@@ -1,8 +1,9 @@
 package com.musicapp.serverapimusicapp.entity;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "genre")
@@ -11,6 +12,9 @@ public class GenreEntity extends BaseEntity{
     private String name;
     @Column
     private String code;
+
+    @OneToMany(mappedBy = "genre")
+    private List<SongEntity> songs = new ArrayList<>();
 
     public String getCode() {
         return code;

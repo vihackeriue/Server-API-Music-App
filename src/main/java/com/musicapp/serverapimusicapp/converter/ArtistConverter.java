@@ -1,37 +1,39 @@
 package com.musicapp.serverapimusicapp.converter;
 
+import com.musicapp.serverapimusicapp.dto.ArtistDTO;
 import com.musicapp.serverapimusicapp.dto.GenreDTO;
+import com.musicapp.serverapimusicapp.entity.ArtistEntity;
 import com.musicapp.serverapimusicapp.entity.GenreEntity;
 import org.springframework.stereotype.Component;
 
 @Component
-public class GenreConverter extends BaseConverter<GenreDTO, GenreEntity> {
-    @Override
-    public GenreEntity toEntity(GenreDTO dto){
-        GenreEntity entity = new GenreEntity();
+public class ArtistConverter extends BaseConverter<ArtistDTO, ArtistEntity>{
+
+
+    public ArtistEntity toEntity(ArtistDTO dto){
+        ArtistEntity entity = new ArtistEntity();
         entity.setName(dto.getName());
-        entity.setCode(dto.getCode());
+        entity.setUrlAvatar(dto.getUrl_avatar());
         return entity;
     }
-    @Override
-    public GenreDTO toDTO(GenreEntity entity){
-        GenreDTO dto = new GenreDTO();
+    public ArtistDTO toDTO(ArtistEntity entity){
+        ArtistDTO dto = new ArtistDTO();
         if(entity.getId() != null){
             dto.setId(entity.getId());
         }
         dto.setName(entity.getName());
-        dto.setCode(entity.getCode());
+        dto.setUrl_avatar(entity.getUrlAvatar());
+        convertToDTOBase(dto,entity);
 //        dto.setCreateDate(entity.getCreateDate());
 //        dto.setCreatedBy(entity.getCreatedBy());
 //        dto.setUpdatedDate(entity.getUpdatedDate());
 //        dto.setUpdatedBy(entity.getUpdatedBy());
-        convertToDTOBase(dto,entity);
         return dto;
     }
-    @Override
-    public GenreEntity toEntity(GenreDTO dto, GenreEntity  entity){
+
+    public ArtistEntity toEntity(ArtistDTO dto, ArtistEntity  entity){
         entity.setName(dto.getName());
-        entity.setCode(dto.getCode());
+        entity.setUrlAvatar(dto.getUrl_avatar());
         return entity;
     }
 }

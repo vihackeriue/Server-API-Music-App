@@ -1,6 +1,6 @@
 package com.musicapp.serverapimusicapp.dto;
 
-public class GenreDTO {
+public class GenreDTO extends BaseDTO<GenreDTO> {
     private String name;
     private String code;
 
