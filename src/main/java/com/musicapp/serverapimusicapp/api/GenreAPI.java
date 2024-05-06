@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.*;
 public class GenreAPI {
     @Autowired
     private IGenreService genreService;
-    @GetMapping(value = "/genre")
+    @GetMapping(value = "/api/genre")
     public GenreOutput showGenre(@RequestParam(value = "page", required = false) Integer page, @RequestParam(value = "limit", required = false) Integer limit){
         GenreOutput result = new GenreOutput();
         if(page != null && limit != null){
@@ -27,17 +27,17 @@ public class GenreAPI {
         }
         return result;
     }
-    @PostMapping(value = "/genre")
+    @PostMapping(value = "/api/genre")
     public GenreDTO createGenre(@RequestBody GenreDTO model){
         return genreService.save(model);
     }
 
-    @PutMapping(value = "/genre/{id}")
+    @PutMapping(value = "/api/genre/{id}")
     public GenreDTO updateGenre(@RequestBody GenreDTO model, @PathVariable("id") long id){
         model.setId(id);
         return genreService.save(model);
     }
-    @DeleteMapping(value = "/genre")
+    @DeleteMapping(value = "/api/genre")
     public void deleteGenre(@RequestBody long[] ids){
         genreService.delete(ids);
     }

@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
 public class SongAPI {
     @Autowired
     private ISongService songService;
-    @GetMapping(value = "/song")
+    @GetMapping(value = "/api/song")
     public SongOutput showSong(@RequestParam(value = "page", required = false) Integer page, @RequestParam(value = "limit" , required = false) Integer limit){
          SongOutput songOutput = new SongOutput();
          if(page != null && limit != null){
@@ -26,16 +26,16 @@ public class SongAPI {
          }
          return songOutput;
     }
-    @PostMapping(value = "/song")
+    @PostMapping(value = "/api/song")
     public SongDTO createSong(@RequestBody SongDTO model){
         return songService.save(model);
     }
-    @PutMapping(value = "/song/{id}")
+    @PutMapping(value = "/api/song/{id}")
     public SongDTO updateSong(@RequestBody SongDTO songDTO, @PathVariable("id") Long id){
         songDTO.setId(id);
         return songService.save(songDTO);
     }
-    @DeleteMapping(value = "/song")
+    @DeleteMapping(value = "/api/song")
     public void deleteGenre(@RequestBody long[] ids){
         songService.delete(ids);
     }
