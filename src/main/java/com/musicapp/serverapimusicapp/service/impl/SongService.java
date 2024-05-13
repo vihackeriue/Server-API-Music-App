@@ -44,6 +44,8 @@ public class SongService implements ISongService {
         }
 //        lấy genre của bài hát
         GenreEntity genreEntity = new GenreEntity();
+
+        System.out.println(songDTO.getGenreDTO().getId());
         Optional<GenreEntity> genreOptional = genreRepository.findById(songDTO.getGenreDTO().getId());
         if (genreOptional.isPresent()) {
             genreEntity = genreOptional.get();

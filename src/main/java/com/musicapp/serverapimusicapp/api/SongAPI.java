@@ -10,10 +10,10 @@ import org.springframework.web.bind.annotation.*;
 
 @CrossOrigin
 @RestController
-public class SongAPI {
+public class SongAPI extends BaseAPI{
     @Autowired
     private ISongService songService;
-    @GetMapping(value = "/api/song")
+    @GetMapping(value = "/song")
     public SongOutput showSong(@RequestParam(value = "page", required = false) Integer page, @RequestParam(value = "limit" , required = false) Integer limit){
          SongOutput songOutput = new SongOutput();
          if(page != null && limit != null){
@@ -26,16 +26,16 @@ public class SongAPI {
          }
          return songOutput;
     }
-    @PostMapping(value = "/api/song")
+    @PostMapping(value = "/song")
     public SongDTO createSong(@RequestBody SongDTO model){
         return songService.save(model);
     }
-    @PutMapping(value = "/api/song/{id}")
+    @PutMapping(value = "/song/{id}")
     public SongDTO updateSong(@RequestBody SongDTO songDTO, @PathVariable("id") Long id){
         songDTO.setId(id);
         return songService.save(songDTO);
     }
-    @DeleteMapping(value = "/api/song")
+    @DeleteMapping(value = "/song")
     public void deleteGenre(@RequestBody long[] ids){
         songService.delete(ids);
     }

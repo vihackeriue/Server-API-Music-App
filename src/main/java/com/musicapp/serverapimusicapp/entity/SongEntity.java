@@ -2,6 +2,9 @@ package com.musicapp.serverapimusicapp.entity;
 
 import jakarta.persistence.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Entity
 @Table(name = "song")
 public class SongEntity extends BaseEntity{
@@ -19,6 +22,11 @@ public class SongEntity extends BaseEntity{
     @ManyToOne
     @JoinColumn(name = "genre_id")
     private GenreEntity genre;
+
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(name = "song_playlist", joinColumns = @JoinColumn(name = "song_id"),
+            inverseJoinColumns = @JoinColumn(name = "playlist_id"))
+    private List<PlaylistEntity> playlist = new ArrayList<>();
 
     public GenreEntity getGenre() {
         return genre;
@@ -66,5 +74,13 @@ public class SongEntity extends BaseEntity{
 
     public void setUrl_audio(String url_audio) {
         this.url_audio = url_audio;
+    }
+
+    public List<PlaylistEntity> getPlaylist() {
+        return playlist;
+    }
+
+    public void setPlaylist(List<PlaylistEntity> playlist) {
+        this.playlist = playlist;
     }
 }

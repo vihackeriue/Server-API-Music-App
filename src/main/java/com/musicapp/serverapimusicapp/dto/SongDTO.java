@@ -1,6 +1,6 @@
 package com.musicapp.serverapimusicapp.dto;
 
-import jakarta.persistence.Column;
+
 
 public class SongDTO extends BaseDTO<SongDTO>{
     private String title;
@@ -11,6 +11,8 @@ public class SongDTO extends BaseDTO<SongDTO>{
 //    private Long artistID;
     private GenreDTO genreDTO;
     private ArtistDTO artistDTO;
+
+
 
     public String getTitle() {
         return title;

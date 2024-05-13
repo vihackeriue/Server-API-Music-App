@@ -20,7 +20,7 @@ public class SongConverter extends BaseConverter<SongDTO, SongEntity>{
         songEntity.setDescription(songDTO.getDescription());
         songEntity.setUrl_audio(songDTO.getUrl_audio());
         songEntity.setUrl_thumbnail(songDTO.getUrl_thumbnail());
-
+        convertToEntityBase(songDTO, songEntity);
         return  songEntity;
     }
     @Override
@@ -33,6 +33,7 @@ public class SongConverter extends BaseConverter<SongDTO, SongEntity>{
         songDTO.setDescription(songEntity.getDescription());
         songDTO.setUrl_audio(songEntity.getUrl_audio());
         songDTO.setUrl_thumbnail(songEntity.getUrl_thumbnail());
+
         if(songEntity.getArtist() != null){
             songDTO.setArtistDTO(artistConverter.toDTO(songEntity.getArtist()));
         }
@@ -48,6 +49,7 @@ public class SongConverter extends BaseConverter<SongDTO, SongEntity>{
         entity.setDescription(dto.getDescription());
         entity.setUrl_audio(dto.getUrl_audio());
         entity.setUrl_thumbnail(dto.getUrl_thumbnail());
+        convertToEntityBase(dto, entity);
         return entity;
     }
 

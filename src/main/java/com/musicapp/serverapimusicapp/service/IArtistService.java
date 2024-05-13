@@ -7,7 +7,6 @@ import java.util.List;
 
 public interface IArtistService {
     ArtistDTO save(ArtistDTO artistDTO);
-
     void delete(long[] ids);
     List<ArtistDTO> findAll(Pageable pageable);
     List<ArtistDTO> findAll();

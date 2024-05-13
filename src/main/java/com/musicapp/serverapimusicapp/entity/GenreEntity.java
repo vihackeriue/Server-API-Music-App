@@ -31,4 +31,12 @@ public class GenreEntity extends BaseEntity{
     public void setName(String name) {
         this.name = name;
     }
+
+    public List<SongEntity> getSongs() {
+        return songs;
+    }
+
+    public void setSongs(List<SongEntity> songs) {
+        this.songs = songs;
+    }
 }
