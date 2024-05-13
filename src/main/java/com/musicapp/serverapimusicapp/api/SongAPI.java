@@ -26,6 +26,14 @@ public class SongAPI extends BaseAPI{
          }
          return songOutput;
     }
+    @GetMapping(value = "/song/{id}")
+    public SongDTO showSongByID(@PathVariable("id") Long id){
+        if(id != null){
+            return songService.findByID(id);
+        }
+        return null;
+    }
+
     @PostMapping(value = "/song")
     public SongDTO createSong(@RequestBody SongDTO model){
         return songService.save(model);

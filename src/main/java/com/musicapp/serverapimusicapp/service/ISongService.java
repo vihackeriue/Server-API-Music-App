@@ -13,4 +13,6 @@ public interface ISongService {
     int totalItem();
 
     void delete(long[] ids);
+
+    SongDTO findByID(long id);
 }

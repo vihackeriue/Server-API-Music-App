@@ -95,4 +95,16 @@ public class SongService implements ISongService {
             songRepository.deleteById(item);
         }
     }
+
+    @Override
+    public SongDTO findByID(long id) {
+        Optional<SongEntity> optionalSongEntity = songRepository.findById(id);
+        if(optionalSongEntity.isPresent()){
+            SongEntity songEntity = optionalSongEntity.get();
+            return songConverter.toDTO(songEntity);
+        }
+        return null;
+
+
+    }
 }
