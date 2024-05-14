@@ -68,6 +68,7 @@ public class UserService implements IUserService {
         Optional<UserEntity> userEnityOptional = userRepository.findByEmail(loginDTO.getEmail());
         if(userEnityOptional.isPresent()){
             UserEntity enity = userEnityOptional.get();
+            UserDTO userDTO = userConverter.toDTO(enity);
             if(passwordEncoder.matches(loginDTO.getPassword(), enity.getPassword())){
                 token = tokenConfig.generateToken(enity.getEmail());
                 TokenEntity tokenEntity = new TokenEntity();
@@ -78,11 +79,11 @@ public class UserService implements IUserService {
                 tokenRepository.save(tokenEntity);
                 System.out.println(token);
                 System.out.println(tokenConfig.extractUsername(token));
-                return new LoginRespone(true, "Đăng nhập thành công!", token);
+                return new LoginRespone(true, "Đăng nhập thành công!", token, userDTO);
             }else
-                return new LoginRespone(false, "Mật khẩu không đúng!", token);
+                return new LoginRespone(false, "Mật khẩu không đúng!", token, null);
         }else {
-            return new LoginRespone(false, "Email không tồn tại!", token);
+            return new LoginRespone(false, "Email không tồn tại!", token, null);
         }
 
     }

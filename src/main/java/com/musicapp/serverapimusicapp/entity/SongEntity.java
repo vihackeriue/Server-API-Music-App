@@ -28,6 +28,10 @@ public class SongEntity extends BaseEntity{
             inverseJoinColumns = @JoinColumn(name = "playlist_id"))
     private List<PlaylistEntity> playlist = new ArrayList<>();
 
+
+    @OneToMany(mappedBy = "song_id")
+    private List<SongInteractionsEntity> songInteractions;
+
     public GenreEntity getGenre() {
         return genre;
     }
