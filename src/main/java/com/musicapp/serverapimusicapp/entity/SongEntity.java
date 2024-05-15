@@ -29,7 +29,7 @@ public class SongEntity extends BaseEntity{
     private List<PlaylistEntity> playlist = new ArrayList<>();
 
 
-    @OneToMany(mappedBy = "song_id")
+    @OneToMany(mappedBy = "song")
     private List<SongInteractionsEntity> songInteractions;
 
     public GenreEntity getGenre() {

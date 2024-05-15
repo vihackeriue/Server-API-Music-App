@@ -28,7 +28,7 @@ public class UserEntity extends BaseEntity{
     @Column
     private Boolean status;
 
-    @OneToMany(mappedBy = "song_id")
+    @OneToMany(mappedBy = "user")
     private List<SongInteractionsEntity> songInteractions;
 
     public String getEmail() {

@@ -15,11 +15,11 @@ public class SongInteractionsEntity extends BaseEntity{
 
     @ManyToOne
     @JoinColumn(name = "user_id")
-    private UserEntity users;
+    private UserEntity user;
 
     @ManyToOne
     @JoinColumn(name = "song_id")
-    private SongEntity songs;
+    private SongEntity song;
 
     public String getInteractionType() {
         return interactionType;
@@ -37,19 +37,19 @@ public class SongInteractionsEntity extends BaseEntity{
         this.rating = rating;
     }
 
-    public UserEntity getUsers() {
-        return users;
+    public UserEntity getUser() {
+        return user;
     }
 
-    public void setUsers(UserEntity users) {
-        this.users = users;
+    public void setUser(UserEntity user) {
+        this.user = user;
     }
 
-    public SongEntity getSongs() {
-        return songs;
+    public SongEntity getSong() {
+        return song;
     }
 
-    public void setSongs(SongEntity songs) {
-        this.songs = songs;
+    public void setSong(SongEntity song) {
+        this.song = song;
     }
 }
