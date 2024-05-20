@@ -11,8 +11,8 @@ public class UserDTO extends BaseDTO<UserDTO>{
     private String fullName;
 
     private String phoneNumber;
-
-
+    private String urlAvatar;
+    private String userPreferences;
     private Boolean status;
 
     public String getEmail() {
@@ -53,5 +53,21 @@ public class UserDTO extends BaseDTO<UserDTO>{
 
     public void setStatus(Boolean status) {
         this.status = status;
+    }
+
+    public String getUrlAvatar() {
+        return urlAvatar;
+    }
+
+    public void setUrlAvatar(String urlAvatar) {
+        this.urlAvatar = urlAvatar;
+    }
+
+    public String getUserPreferences() {
+        return userPreferences;
+    }
+
+    public void setUserPreferences(String userPreferences) {
+        this.userPreferences = userPreferences;
     }
 }

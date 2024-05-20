@@ -8,7 +8,11 @@ import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @CrossOrigin
 @RestController
@@ -28,9 +32,18 @@ public class ArtistAPI extends BaseAPI<ArtistDTO>{
         }
         return result;
     }
+    @GetMapping(value = "/artist/{id}")
+    public ResponseEntity<List<ArtistDTO>> getArtistByID(@PathVariable("id") long id){
+        List<ArtistDTO> artistDTOList = artistService.findByIDUser(id);
+        if (artistDTOList.isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
+        return new ResponseEntity<>(artistDTOList, HttpStatus.OK);
+    }
+
     @PostMapping(value = "/artist")
-    public ArtistDTO createArtist(@RequestBody ArtistRequest model){
-        return artistService.save(model.getArtist());
+    public ArtistDTO createArtist(@RequestBody ArtistDTO model){
+        return artistService.save(model);
     }
     @PutMapping(value = "/artist/{id}")
     public ArtistDTO updateArtist(@RequestBody ArtistDTO model, @PathVariable("id") long id, HttpServletRequest request){
@@ -39,6 +52,7 @@ public class ArtistAPI extends BaseAPI<ArtistDTO>{
         return artistService.save(model);
 
     }
+
     @DeleteMapping(value = "/artist")
     public void deleteArtist(@RequestBody long[] ids, HttpServletRequest request){
         artistService.delete(ids);

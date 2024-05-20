@@ -4,7 +4,9 @@ import com.musicapp.serverapimusicapp.converter.ArtistConverter;
 import com.musicapp.serverapimusicapp.dto.ArtistDTO;
 import com.musicapp.serverapimusicapp.entity.ArtistEntity;
 import com.musicapp.serverapimusicapp.entity.GenreEntity;
+import com.musicapp.serverapimusicapp.entity.UserEntity;
 import com.musicapp.serverapimusicapp.repository.ArtistRepository;
+import com.musicapp.serverapimusicapp.repository.UserRepository;
 import com.musicapp.serverapimusicapp.service.IArtistService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
@@ -20,8 +22,12 @@ public class ArtistService implements IArtistService {
     @Autowired
     private ArtistConverter artistConverter;
 
+    @Autowired
+    private UserRepository userRepository;
+
     @Override
     public ArtistDTO save(ArtistDTO artistDTO) {
+        System.out.println(artistDTO.getName());
         ArtistEntity artistEntity = new ArtistEntity();
         System.out.println(artistDTO.getId());
         if(artistDTO.getId() != null){
@@ -35,6 +41,16 @@ public class ArtistService implements IArtistService {
             artistEntity = artistConverter.toEntity(artistDTO);
         }
         System.out.println(artistEntity.getId());
+
+
+        Optional<UserEntity> optionalUser = userRepository.findById(artistDTO.getIdUser());
+        if (optionalUser.isPresent()) {
+            artistEntity.setUser(optionalUser.get());
+            // Do something with the user
+        } else {
+            return null;
+
+        }
         artistEntity = artistRepository.save(artistEntity);
         return artistConverter.toDTO(artistEntity);
     }
@@ -68,7 +84,21 @@ public class ArtistService implements IArtistService {
     public int totalItem() {
         return (int) artistRepository.count();
     }
-//    tìm kiếm artist theo ID
+
+    @Override
+    public List<ArtistDTO> findByIDUser(Long idUser) {
+        if(idUser != null){
+            List<ArtistEntity> artistEntities = artistRepository.findByIDUser(idUser);
+            List<ArtistDTO> artists = new ArrayList<>();
+            for (ArtistEntity item : artistEntities){
+                artists.add(artistConverter.toDTO(item));
+            }
+            return artists;
+        }
+        return null;
+    }
+
+    //    tìm kiếm artist theo ID
     public ArtistEntity findByID(Long id){
         Optional<ArtistEntity> optionalArtist = artistRepository.findById(id);
         if (optionalArtist.isPresent()) {

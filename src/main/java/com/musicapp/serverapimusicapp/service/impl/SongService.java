@@ -12,10 +12,16 @@ import com.musicapp.serverapimusicapp.service.ISongService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
 public class SongService implements ISongService {
@@ -45,15 +51,15 @@ public class SongService implements ISongService {
 //        lấy genre của bài hát
         GenreEntity genreEntity = new GenreEntity();
 
-        System.out.println(songDTO.getGenreDTO().getId());
-        Optional<GenreEntity> genreOptional = genreRepository.findById(songDTO.getGenreDTO().getId());
+//        System.out.println(songDTO.getGenreDTO().getId());
+        Optional<GenreEntity> genreOptional = genreRepository.findById(songDTO.getGenreID());
         if (genreOptional.isPresent()) {
             genreEntity = genreOptional.get();
             // Do something with the song object
         } else {
             // Handle case when song with ID 1 is not found
         }
-        ArtistEntity artistEntity = artistRepository.findById(songDTO.getArtistDTO().getId())
+        ArtistEntity artistEntity = artistRepository.findById(songDTO.getArtistID())
                 .orElseThrow(() -> new RuntimeException("Không tìm thấy nghệ sĩ với ID: " + songDTO.getArtistDTO().getId()));
         songEntity.setGenre(genreEntity);
         songEntity.setArtist(artistEntity);
@@ -95,16 +101,43 @@ public class SongService implements ISongService {
             songRepository.deleteById(item);
         }
     }
-
     @Override
     public SongDTO findByID(long id) {
         Optional<SongEntity> optionalSongEntity = songRepository.findById(id);
         if(optionalSongEntity.isPresent()){
             SongEntity songEntity = optionalSongEntity.get();
+            String urlAudio = songEntity.getUrl_audio();
+            updateView(songConverter.toDTO(songEntity));
             return songConverter.toDTO(songEntity);
         }
         return null;
+    }
+    @Override
+    public long updateView(SongDTO songDTO) {
+        SongEntity songEntity = new SongEntity();
+        long views = songDTO.getViews() + 1;
+        songDTO.setViews(views);
+        songEntity = songConverter.toEntity(songDTO);
+        songRepository.save(songEntity);
+        return 0;
+    }
 
+    @Override
+    public String saveFile(MultipartFile file, String url) {
+        String songId = UUID.randomUUID().toString();
+        // Lưu file với tên là ID của bài hát
+        Path path = Paths.get(url + songId + getFileExtension(file.getOriginalFilename()));
+        // Lưu file trên server
+        try {
+            Files.createDirectories(path.getParent());
+            Files.write(path, file.getBytes());
+            return path.toString();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
 
+    }
+    private String getFileExtension(String filename) {
+        return filename.substring(filename.lastIndexOf('.'));
     }
 }

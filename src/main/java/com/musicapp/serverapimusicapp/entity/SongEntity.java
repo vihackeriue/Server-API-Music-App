@@ -16,6 +16,8 @@ public class SongEntity extends BaseEntity{
     private String url_thumbnail;
     @Column
     private String url_audio;
+    @Column
+    private long views;
     @ManyToOne
     @JoinColumn(name = "artist_id")
     private ArtistEntity artist;
@@ -86,5 +88,21 @@ public class SongEntity extends BaseEntity{
 
     public void setPlaylist(List<PlaylistEntity> playlist) {
         this.playlist = playlist;
+    }
+
+    public long getViews() {
+        return views;
+    }
+
+    public void setViews(long views) {
+        this.views = views;
+    }
+
+    public List<SongInteractionsEntity> getSongInteractions() {
+        return songInteractions;
+    }
+
+    public void setSongInteractions(List<SongInteractionsEntity> songInteractions) {
+        this.songInteractions = songInteractions;
     }
 }

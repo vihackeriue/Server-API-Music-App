@@ -7,10 +7,12 @@ public class SongDTO extends BaseDTO<SongDTO>{
     private String description;
     private String url_thumbnail;
     private String url_audio;
-//    private Long genreID;
-//    private Long artistID;
+    private Long genreID;
+    private Long artistID;
     private GenreDTO genreDTO;
     private ArtistDTO artistDTO;
+    private long views;
+
 
 
 
@@ -60,5 +62,29 @@ public class SongDTO extends BaseDTO<SongDTO>{
 
     public void setArtistDTO(ArtistDTO artistDTO) {
         this.artistDTO = artistDTO;
+    }
+
+    public long getViews() {
+        return views;
+    }
+
+    public void setViews(long views) {
+        this.views = views;
+    }
+
+    public Long getGenreID() {
+        return genreID;
+    }
+
+    public void setGenreID(Long genreID) {
+        this.genreID = genreID;
+    }
+
+    public Long getArtistID() {
+        return artistID;
+    }
+
+    public void setArtistID(Long artistID) {
+        this.artistID = artistID;
     }
 }

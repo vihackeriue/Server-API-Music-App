@@ -23,13 +23,15 @@ public class UserEntity extends BaseEntity{
     private String urlAvatar;
 
     @Column(name = "user_preferences")
-    private Boolean userPreferences;
+    private String userPreferences;
 
     @Column
     private Boolean status;
 
     @OneToMany(mappedBy = "user")
     private List<SongInteractionsEntity> songInteractions;
+    @OneToMany(mappedBy = "user")
+    private List<ArtistEntity> artists;
 
     public String getEmail() {
         return email;
@@ -71,4 +73,29 @@ public class UserEntity extends BaseEntity{
         this.phoneNumber = phoneNumber;
     }
 
+    public String getUrlAvatar() {
+        return urlAvatar;
+    }
+
+    public void setUrlAvatar(String urlAvatar) {
+        this.urlAvatar = urlAvatar;
+    }
+
+
+
+    public List<SongInteractionsEntity> getSongInteractions() {
+        return songInteractions;
+    }
+
+    public void setSongInteractions(List<SongInteractionsEntity> songInteractions) {
+        this.songInteractions = songInteractions;
+    }
+
+    public String getUserPreferences() {
+        return userPreferences;
+    }
+
+    public void setUserPreferences(String userPreferences) {
+        this.userPreferences = userPreferences;
+    }
 }

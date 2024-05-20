@@ -18,6 +18,8 @@ public class UserConverter extends BaseConverter<UserDTO, UserEntity>{
         userDTO.setFullName(entity.getFullName());
         userDTO.setPhoneNumber(entity.getPhoneNumber());
         userDTO.setStatus(entity.getStatus());
+        userDTO.setUrlAvatar(entity.getUrlAvatar());
+        userDTO.setUserPreferences(entity.getUserPreferences());
         return userDTO;
     }
 
@@ -29,6 +31,8 @@ public class UserConverter extends BaseConverter<UserDTO, UserEntity>{
         userEnity.setFullName(dto.getFullName());
         userEnity.setPhoneNumber(dto.getPhoneNumber());
         userEnity.setStatus(dto.getStatus());
+        userEnity.setUrlAvatar(dto.getUrlAvatar());
+        userEnity.setUserPreferences(dto.getUserPreferences());
         return userEnity;
     }
 
@@ -39,6 +43,8 @@ public class UserConverter extends BaseConverter<UserDTO, UserEntity>{
         entity.setFullName(dto.getFullName());
         entity.setPhoneNumber(dto.getPhoneNumber());
         entity.setStatus(dto.getStatus());
+        entity.setUrlAvatar(dto.getUrlAvatar());
+        entity.setUserPreferences(dto.getUserPreferences());
         return entity;
     }
 }

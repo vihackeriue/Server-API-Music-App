@@ -10,6 +10,9 @@ public class SongInteractionsEntity extends BaseEntity{
 
     @Column(name = "interaction_type")
     private String interactionType;
+
+    @Column()
+    private String comment;
     @Column()
     private String rating;
 
@@ -51,5 +54,13 @@ public class SongInteractionsEntity extends BaseEntity{
 
     public void setSong(SongEntity song) {
         this.song = song;
+    }
+
+    public String getComment() {
+        return comment;
+    }
+
+    public void setComment(String comment) {
+        this.comment = comment;
     }
 }

@@ -16,8 +16,14 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
 public class UserService implements IUserService {
@@ -127,6 +133,33 @@ public class UserService implements IUserService {
         }
         return false;
     }
+    @Override
+    public String saveFile(MultipartFile file, String url) {
+        // Lưu file trên server
+        // Tạo ID duy nhất cho bài hát
+        String songId = UUID.randomUUID().toString();
+        // Lưu file với tên là ID của bài hát
+        Path path = Paths.get(url + songId + getFileExtension(file.getOriginalFilename()));
+        try {
+            Files.createDirectories(path.getParent());
+            Files.write(path, file.getBytes());
+            return path.toString();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
 
+    }
 
+    @Override
+    public UserDTO updateFrofile(UserDTO userDTO) {
+        if(userDTO.getId() != null){
+            UserEntity user = userConverter.toEntity(userDTO);
+
+            return userConverter.toDTO(userRepository.save(user));
+        }
+        return null;
+    }
+    private String getFileExtension(String filename) {
+        return filename.substring(filename.lastIndexOf('.'));
+    }
 }

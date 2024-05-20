@@ -14,6 +14,10 @@ public class ArtistEntity extends BaseEntity{
     @OneToMany(mappedBy = "artist", cascade = CascadeType.ALL)
     private List<SongEntity> songs = new ArrayList<>();
 
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private UserEntity user;
+
     public String getName() {
         return name;
     }
@@ -36,5 +40,13 @@ public class ArtistEntity extends BaseEntity{
 
     public void setSongs(List<SongEntity> songs) {
         this.songs = songs;
+    }
+
+    public UserEntity getUser() {
+        return user;
+    }
+
+    public void setUser(UserEntity user) {
+        this.user = user;
     }
 }

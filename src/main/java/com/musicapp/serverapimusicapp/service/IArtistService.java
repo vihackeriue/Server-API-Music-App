@@ -11,4 +11,5 @@ public interface IArtistService {
     List<ArtistDTO> findAll(Pageable pageable);
     List<ArtistDTO> findAll();
     int totalItem();
+    List<ArtistDTO> findByIDUser(Long idUser);
 }

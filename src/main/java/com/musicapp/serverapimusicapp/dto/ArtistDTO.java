@@ -5,6 +5,7 @@ import java.util.List;
 public class ArtistDTO extends BaseDTO<ArtistDTO>{
     private String name;
     private String url_avatar;
+    private Long idUser;
     private List<Long> songIds;
 
     public String getName() {
@@ -29,5 +30,13 @@ public class ArtistDTO extends BaseDTO<ArtistDTO>{
 
     public void setSongIds(List<Long> songIds) {
         this.songIds = songIds;
+    }
+
+    public Long getIdUser() {
+        return idUser;
+    }
+
+    public void setIdUser(Long idUser) {
+        this.idUser = idUser;
     }
 }

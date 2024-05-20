@@ -1,6 +1,8 @@
 package com.musicapp.serverapimusicapp.api;
 
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.musicapp.serverapimusicapp.api.output.BaseResponse;
 
 import com.musicapp.serverapimusicapp.dto.LoginDTO;
@@ -13,6 +15,7 @@ import org.springframework.http.HttpRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 @CrossOrigin
 @RestController
@@ -31,6 +34,24 @@ public class UserAPI extends BaseAPI{
     @PostMapping(value = "/login")
     public ResponseEntity<?> Login(@RequestBody LoginDTO loginDTO){
         return ResponseEntity.ok(userService.login(loginDTO));
+    }
+    @PostMapping(value = "/profile/update/{id}")
+    public UserDTO updateFrofile(@RequestParam("fileImage") MultipartFile fileImage,
+                                           @RequestParam("info") String userJson,
+                                           @PathVariable("id") Long id){
+        ObjectMapper objectMapper = new ObjectMapper();
+        try {
+            UserDTO model = objectMapper.readValue(userJson, UserDTO.class);
+            model.setId(id);
+            String urlAvatar = userService.saveFile(fileImage,"data/user/");
+            if(!urlAvatar.isEmpty()){
+                model.setUrlAvatar(urlAvatar);
+            }
+            return userService.updateFrofile(model);
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
+        }
+
     }
     @PostMapping(value = "/logout")
     public ResponseEntity<?> Login(HttpServletRequest request){
