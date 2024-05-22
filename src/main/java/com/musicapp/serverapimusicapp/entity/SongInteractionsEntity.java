@@ -6,16 +6,10 @@ import jakarta.persistence.*;
 @Entity
 @Table(name = "song_interactions")
 public class SongInteractionsEntity extends BaseEntity{
-
-
-    @Column(name = "interaction_type")
-    private String interactionType;
-
     @Column()
-    private String comment;
+    private int rating;
     @Column()
-    private String rating;
-
+    private long views;
     @ManyToOne
     @JoinColumn(name = "user_id")
     private UserEntity user;
@@ -24,19 +18,11 @@ public class SongInteractionsEntity extends BaseEntity{
     @JoinColumn(name = "song_id")
     private SongEntity song;
 
-    public String getInteractionType() {
-        return interactionType;
-    }
-
-    public void setInteractionType(String interactionType) {
-        this.interactionType = interactionType;
-    }
-
-    public String getRating() {
+    public int getRating() {
         return rating;
     }
 
-    public void setRating(String rating) {
+    public void setRating(int rating) {
         this.rating = rating;
     }
 
@@ -56,11 +42,13 @@ public class SongInteractionsEntity extends BaseEntity{
         this.song = song;
     }
 
-    public String getComment() {
-        return comment;
+
+
+    public long getViews() {
+        return views;
     }
 
-    public void setComment(String comment) {
-        this.comment = comment;
+    public void setViews(long views) {
+        this.views = views;
     }
 }

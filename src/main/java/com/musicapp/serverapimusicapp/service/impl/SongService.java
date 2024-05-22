@@ -2,13 +2,13 @@ package com.musicapp.serverapimusicapp.service.impl;
 
 import com.musicapp.serverapimusicapp.converter.SongConverter;
 import com.musicapp.serverapimusicapp.dto.SongDTO;
-import com.musicapp.serverapimusicapp.entity.ArtistEntity;
-import com.musicapp.serverapimusicapp.entity.GenreEntity;
-import com.musicapp.serverapimusicapp.entity.SongEntity;
+import com.musicapp.serverapimusicapp.entity.*;
 import com.musicapp.serverapimusicapp.repository.ArtistRepository;
 import com.musicapp.serverapimusicapp.repository.GenreRepository;
+import com.musicapp.serverapimusicapp.repository.SongInteractionsRepository;
 import com.musicapp.serverapimusicapp.repository.SongRepository;
 import com.musicapp.serverapimusicapp.service.ISongService;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -34,6 +34,8 @@ public class SongService implements ISongService {
     private ArtistRepository artistRepository;
     @Autowired
     private SongConverter songConverter;
+    @Autowired
+    private SongInteractionsRepository songInteractionsRepository;
     @Override
     public SongDTO save(SongDTO songDTO) {
         SongEntity songEntity = new SongEntity();
@@ -75,6 +77,8 @@ public class SongService implements ISongService {
         List<SongEntity> entities = songRepository.findAll(pageable).getContent();
         for(SongEntity item: entities){
             SongDTO songDTO = songConverter.toDTO(item);
+            songDTO.setUrl_audio("api/song/audio/"+ item.getId());
+            songDTO.setUrl_thumbnail("api/song/avatar/"+ item.getId());
             results.add(songDTO);
         }
         return results;
@@ -86,6 +90,8 @@ public class SongService implements ISongService {
         List<SongEntity> entities = songRepository.findAll();
         for(SongEntity item: entities){
             SongDTO songDTO = songConverter.toDTO(item);
+            songDTO.setUrl_audio("api/song/audio/"+ item.getId());
+            songDTO.setUrl_thumbnail("api/song/avatar/"+ item.getId());
             results.add(songDTO);
         }
         return results;
@@ -102,25 +108,62 @@ public class SongService implements ISongService {
         }
     }
     @Override
-    public SongDTO findByID(long id) {
-        Optional<SongEntity> optionalSongEntity = songRepository.findById(id);
+    public SongDTO findByID(long idsong, long idUser) {
+        Optional<SongEntity> optionalSongEntity = songRepository.findById(idsong);
         if(optionalSongEntity.isPresent()){
             SongEntity songEntity = optionalSongEntity.get();
             String urlAudio = songEntity.getUrl_audio();
-            updateView(songConverter.toDTO(songEntity));
-            return songConverter.toDTO(songEntity);
+            SongDTO songDTO = songConverter.toDTO(songEntity);
+//            if(idUser != -1){
+//                songInteractionsRepository.incrementViews(songEntity.getId(), idUser);
+//            }else {
+//                updateView(songDTO);
+//            }
+            incrementViews(idsong, idUser);
+
+            System.out.println(songEntity.getSongInteractions());
+            return songDTO;
         }
         return null;
     }
     @Override
+    public String findUrlAudioById(Long id) {
+        return songRepository.findUrlAudioById(id);
+    }
+    @Override
+    public String findUrlAvatarById(Long id) {
+        return songRepository.findUrlAvatarById(id);
+    }
+
+    @Override
     public long updateView(SongDTO songDTO) {
+
         SongEntity songEntity = new SongEntity();
         long views = songDTO.getViews() + 1;
         songDTO.setViews(views);
         songEntity = songConverter.toEntity(songDTO);
+        System.out.println(songEntity.getId());
         songRepository.save(songEntity);
         return 0;
     }
+    public void incrementViews(Long songId, Long userId) {
+        Optional<SongInteractionsEntity> interaction = songInteractionsRepository.findBySongIdAndUserId(songId, userId);
+        if (interaction.isPresent()) {
+            songInteractionsRepository.incrementViews(songId, userId);
+        } else {
+            SongInteractionsEntity newInteraction = new SongInteractionsEntity();
+
+            newInteraction.setSong(songRepository.findById(songId).orElseThrow(() -> new EntityNotFoundException("Song not found")));
+            UserEntity user = new UserEntity();
+            user.setId(userId);
+            newInteraction.setUser(user);
+            newInteraction.setViews(1);
+//            newInteraction.setRating(0); // default value
+            System.out.println(newInteraction.getUser().getId());
+            songInteractionsRepository.save(newInteraction);
+        }
+    }
+
 
     @Override
     public String saveFile(MultipartFile file, String url) {

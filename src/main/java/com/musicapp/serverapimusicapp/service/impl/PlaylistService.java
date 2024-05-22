@@ -1,5 +1,6 @@
 package com.musicapp.serverapimusicapp.service.impl;
 
+import com.musicapp.serverapimusicapp.api.output.BaseResponse;
 import com.musicapp.serverapimusicapp.converter.PlaylistConverter;
 import com.musicapp.serverapimusicapp.dto.PlaylistDTO;
 import com.musicapp.serverapimusicapp.entity.ArtistEntity;
@@ -11,10 +12,17 @@ import com.musicapp.serverapimusicapp.service.IPlaylistService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
+
 @Service
 public class PlaylistService implements IPlaylistService {
     @Autowired
@@ -52,7 +60,10 @@ public class PlaylistService implements IPlaylistService {
         List<PlaylistDTO> results = new ArrayList<>();
         List<PlaylistEntity> entities = playlistRepository.findAll(pageable).getContent();
         for (PlaylistEntity item : entities){
-            results.add(playlistConverter.toDTO(item));
+            PlaylistDTO playlistDTO =playlistConverter.toDTO(item);
+//            playlistDTO.setUrlAvatar("http://192.168.1.2:8081/api/playlist/avatar/"+ item.getId());
+            playlistDTO.setUrlAvatar("api/playlist/avatar/"+ item.getId());
+            results.add(playlistDTO);
         }
         return results;
     }
@@ -62,7 +73,10 @@ public class PlaylistService implements IPlaylistService {
         List<PlaylistDTO> results = new ArrayList<>();
         List<PlaylistEntity> entities = playlistRepository.findAll();
         for (PlaylistEntity item : entities){
-            results.add(playlistConverter.toDTO(item));
+            PlaylistDTO playlistDTO =playlistConverter.toDTO(item);
+//            playlistDTO.setUrlAvatar("http://192.168.1.2:8081/api/playlist/avatar/"+ item.getId());
+                playlistDTO.setUrlAvatar("/api/playlist/avatar/"+ item.getId());
+            results.add(playlistDTO);
         }
         return results;
     }
@@ -79,5 +93,41 @@ public class PlaylistService implements IPlaylistService {
         }else {
             return null;
         }
+    }
+    @Override
+    public BaseResponse addSongToPlaylist(Long playlistId, Long songId) {
+        PlaylistEntity playlist = playlistRepository.findById(playlistId)
+                .orElseThrow(() -> new RuntimeException("Playlist not found"));
+        SongEntity song = songRepository.findById(songId)
+                .orElseThrow(() -> new RuntimeException("Song not found"));
+
+        if (playlist.getSongs().contains(song)) {
+            return new BaseResponse(false,"Bài hát đã tồn tại" );
+        }
+        playlist.getSongs().add(song);
+        playlistRepository.save(playlist);
+        return new BaseResponse(true,"Thêm bài hát thành công!" );
+    }
+    @Override
+    public String findUrlAvatarById(Long id) {
+        return songRepository.findUrlAvatarById(id);
+    }
+    @Override
+    public String saveFile(MultipartFile file, String url) {
+        String songId = UUID.randomUUID().toString();
+        // Lưu file với tên là ID của bài hát
+        Path path = Paths.get(url + songId + getFileExtension(file.getOriginalFilename()));
+        // Lưu file trên server
+        try {
+            Files.createDirectories(path.getParent());
+            Files.write(path, file.getBytes());
+            return path.toString();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+    }
+    private String getFileExtension(String filename) {
+        return filename.substring(filename.lastIndexOf('.'));
     }
 }

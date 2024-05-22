@@ -85,6 +85,7 @@ public class UserService implements IUserService {
                 tokenRepository.save(tokenEntity);
                 System.out.println(token);
                 System.out.println(tokenConfig.extractUsername(token));
+                userDTO.setUrlAvatar("api/profile/avatar/"+userDTO.getId());
                 return new LoginRespone(true, "Đăng nhập thành công!", token, userDTO);
             }else
                 return new LoginRespone(false, "Mật khẩu không đúng!", token, null);
@@ -105,6 +106,24 @@ public class UserService implements IUserService {
         return null;
     }
 
+    @Override
+    public Long findIDByEmail(String token) {
+       if( !tokenConfig.isTokenExpired(token)){
+           String email = tokenConfig.extractUsername(token);
+           System.out.println(email);
+           Optional<UserEntity> userEntityOptional = userRepository.findByEmail(email);
+           if(userEntityOptional.isPresent()){
+               UserEntity user = userEntityOptional.get();
+               return user.getId();
+           }
+       }
+
+        return (long) -1;
+    }
+    @Override
+    public String findUrlAvatarById(Long id) {
+        return userRepository.findUrlAvatarById(id);
+    }
     @Override
     public BaseResponse logout(String token) {
 

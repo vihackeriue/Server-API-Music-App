@@ -1,6 +1,7 @@
 package com.musicapp.serverapimusicapp.dto;
 
 
+import java.util.List;
 
 public class SongDTO extends BaseDTO<SongDTO>{
     private String title;
@@ -13,6 +14,7 @@ public class SongDTO extends BaseDTO<SongDTO>{
     private ArtistDTO artistDTO;
     private long views;
 
+    private List<Long> SongInteractionsID;
 
 
 
@@ -86,5 +88,13 @@ public class SongDTO extends BaseDTO<SongDTO>{
 
     public void setArtistID(Long artistID) {
         this.artistID = artistID;
+    }
+
+    public List<Long> getSongInteractionsID() {
+        return SongInteractionsID;
+    }
+
+    public void setSongInteractionsID(List<Long> songInteractionsID) {
+        SongInteractionsID = songInteractionsID;
     }
 }

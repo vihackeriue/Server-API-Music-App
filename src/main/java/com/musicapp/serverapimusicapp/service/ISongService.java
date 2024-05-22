@@ -19,10 +19,12 @@ public interface ISongService {
 
     void delete(long[] ids);
 
-    SongDTO findByID(long id);
+    SongDTO findByID(long id, long idUser);
 
     long updateView(SongDTO songDTO);
 
     String saveFile(MultipartFile file, String url);
+    String findUrlAudioById(Long id);
+    String findUrlAvatarById(Long id);
 
 }

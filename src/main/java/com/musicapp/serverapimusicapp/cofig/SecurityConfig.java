@@ -23,7 +23,7 @@ public class SecurityConfig  implements WebMvcConfigurer {
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(jwtInterceptor)
-                .excludePathPatterns("/api/login", "/api/register","/api/song/audio", "/api/song", "/api/genre")
+                .excludePathPatterns("/api/login", "/api/register","/api/song/audio", "/api/song", "/api/genre","/api/song/avatar/**")
                 .addPathPatterns("/**");
     }
     @Override

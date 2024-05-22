@@ -26,6 +26,10 @@ public abstract class BaseEntity {
     @LastModifiedDate
     private String updatedDate;
 
+    public void setId(Long id) {
+        this.id = id;
+    }
+
     public Long getId() {
         return id;
     }

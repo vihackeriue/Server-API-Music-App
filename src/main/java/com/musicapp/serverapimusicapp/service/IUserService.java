@@ -13,6 +13,7 @@ public interface IUserService {
 
 
     String findByEmail(String email);
+    Long findIDByEmail(String token);
 
     BaseResponse logout(String token);
 
@@ -21,6 +22,7 @@ public interface IUserService {
     String saveFile(MultipartFile file, String url);
 
     UserDTO updateFrofile(UserDTO userDTO);
+    public String findUrlAvatarById(Long id);
 
 
 }
