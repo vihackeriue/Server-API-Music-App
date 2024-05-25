@@ -20,6 +20,7 @@ public interface ISongService {
     void delete(long[] ids);
 
     SongDTO findByID(long id, long idUser);
+    SongDTO findByID(long idsong);
 
     long updateView(SongDTO songDTO);
 

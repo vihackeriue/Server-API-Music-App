@@ -120,8 +120,23 @@ public class SongService implements ISongService {
 //                updateView(songDTO);
 //            }
             incrementViews(idsong, idUser);
+            songDTO.setUrl_audio("api/song/audio/"+ idsong);
+            songDTO.setUrl_thumbnail("api/song/avatar/"+ idsong);
 
             System.out.println(songEntity.getSongInteractions());
+            return songDTO;
+        }
+        return null;
+    }
+
+    @Override
+    public SongDTO findByID(long idsong) {
+        Optional<SongEntity> optionalSongEntity = songRepository.findById(idsong);
+        if(optionalSongEntity.isPresent()){
+            SongEntity songEntity = optionalSongEntity.get();
+            SongDTO songDTO = songConverter.toDTO(songEntity);
+            songDTO.setUrl_audio("api/song/audio/"+ idsong);
+            songDTO.setUrl_thumbnail("api/song/avatar/"+ idsong);
             return songDTO;
         }
         return null;

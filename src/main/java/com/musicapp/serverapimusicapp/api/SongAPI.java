@@ -1,7 +1,9 @@
 package com.musicapp.serverapimusicapp.api;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.musicapp.serverapimusicapp.api.output.RecommendSongOutput;
 import com.musicapp.serverapimusicapp.api.output.SongOutput;
 import com.musicapp.serverapimusicapp.dto.SongDTO;
 import com.musicapp.serverapimusicapp.service.ISongService;
@@ -12,12 +14,14 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.nio.file.Files;
+import java.util.ArrayList;
 import java.util.List;
 
 @CrossOrigin
@@ -194,6 +198,57 @@ public class SongAPI extends BaseAPI{
     @DeleteMapping(value = "/song")
     public void deleteSong(@RequestBody long[] ids){
         songService.delete(ids);
+    }
+
+    @GetMapping("/song/recommend")
+    public RecommendSongOutput recommend(@RequestParam int userId) {
+        RecommendSongOutput recommendSongOutput = new RecommendSongOutput();
+        RestTemplate restTemplate = new RestTemplate();
+        String flaskApiUrl = "http://localhost:5000/recommend/" + userId ;
+        ResponseEntity<String> response = restTemplate.getForEntity(flaskApiUrl, String.class);
+
+
+        ObjectMapper objectMapper = new ObjectMapper();
+        try {
+            JsonNode jsonNode = objectMapper.readTree(response.getBody());
+            JsonNode recommendedSongsViewNode = jsonNode.get("recommended_songs_view");
+            if (recommendedSongsViewNode != null) {
+                List<SongDTO> songs = new ArrayList<>();
+//                long[] idSongRate = new long[recommendedSongsViewNode.size()];
+
+                // Duyệt qua các phần tử của recommendedSongsViewNode và chuyển đổi chúng thành kiểu dữ liệu long
+                for (int i = 0; i < recommendedSongsViewNode.size(); i++) {
+//                    idSongRate[i] = recommendedSongsViewNode.get(i).asLong();
+                    songs.add(songService.findByID(recommendedSongsViewNode.get(i).asLong()));
+                }
+                recommendSongOutput.setRecommendedSongsView(songs);
+            }
+
+            JsonNode recommendedSongsRateNode = jsonNode.get("recommended_songs_rate");
+            if (recommendedSongsRateNode != null) {
+                List<SongDTO> songs = new ArrayList<>();
+//                long[] idSongRate = new long[recommendedSongsRateNode.size()];
+
+                // Duyệt qua các phần tử của recommendedSongsViewNode và chuyển đổi chúng thành kiểu dữ liệu long
+                for (int i = 0; i < recommendedSongsRateNode.size(); i++) {
+//                    idSongRate[i] = recommendedSongsViewNode.get(i).asLong();
+                    songs.add(songService.findByID(recommendedSongsViewNode.get(i).asLong()));
+                }
+                recommendSongOutput.setRecommendedSongsRate(songs);
+            }
+            System.out.println(recommendedSongsViewNode);
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
+        }
+        return recommendSongOutput;
+    }
+    @GetMapping("/song/list")
+    public List<SongDTO> recommend(@RequestBody long[] ids){
+        List<SongDTO> songs = new ArrayList<>();
+        for(long id: ids){
+            songs.add(songService.findByID(id));
+        }
+        return songs;
     }
 
 }

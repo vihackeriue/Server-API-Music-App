@@ -1,6 +1,7 @@
 package com.musicapp.serverapimusicapp.service.impl;
 
 import com.musicapp.serverapimusicapp.converter.SongInteractionsConverter;
+import com.musicapp.serverapimusicapp.dto.SongDTO;
 import com.musicapp.serverapimusicapp.dto.SongInteractionsDTO;
 import com.musicapp.serverapimusicapp.entity.GenreEntity;
 import com.musicapp.serverapimusicapp.entity.SongEntity;
@@ -83,5 +84,15 @@ public class SongInteractionsService implements ISongInteractionsService {
             result.add(songInteractionsConverter.toDTO(item));
         }
         return result;
+    }
+
+    @Override
+    public List<SongInteractionsDTO> findAll() {
+        List<SongInteractionsEntity> songInteractionsEntities =songInteractionsRepository.findAll();
+        List<SongInteractionsDTO> results = new ArrayList<>();
+        for (SongInteractionsEntity songInteractions: songInteractionsEntities){
+            results.add(songInteractionsConverter.toDTO(songInteractions));
+        }
+        return results;
     }
 }
