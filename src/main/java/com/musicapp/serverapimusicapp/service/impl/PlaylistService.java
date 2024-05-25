@@ -62,7 +62,7 @@ public class PlaylistService implements IPlaylistService {
         for (PlaylistEntity item : entities){
             PlaylistDTO playlistDTO =playlistConverter.toDTO(item);
 //            playlistDTO.setUrlAvatar("http://192.168.1.2:8081/api/playlist/avatar/"+ item.getId());
-            playlistDTO.setUrlAvatar("api/playlist/avatar/"+ item.getId());
+            playlistDTO.setUrlAvatar("playlist/avatar/"+ item.getId());
             results.add(playlistDTO);
         }
         return results;
@@ -75,7 +75,7 @@ public class PlaylistService implements IPlaylistService {
         for (PlaylistEntity item : entities){
             PlaylistDTO playlistDTO =playlistConverter.toDTO(item);
 //            playlistDTO.setUrlAvatar("http://192.168.1.2:8081/api/playlist/avatar/"+ item.getId());
-                playlistDTO.setUrlAvatar("/api/playlist/avatar/"+ item.getId());
+                playlistDTO.setUrlAvatar("playlist/avatar/"+ item.getId());
             results.add(playlistDTO);
         }
         return results;

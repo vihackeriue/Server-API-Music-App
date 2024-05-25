@@ -85,7 +85,7 @@ public class UserService implements IUserService {
                 tokenRepository.save(tokenEntity);
                 System.out.println(token);
                 System.out.println(tokenConfig.extractUsername(token));
-                userDTO.setUrlAvatar("api/profile/avatar/"+userDTO.getId());
+                userDTO.setUrlAvatar("profile/avatar/"+userDTO.getId());
                 return new LoginRespone(true, "Đăng nhập thành công!", token, userDTO);
             }else
                 return new LoginRespone(false, "Mật khẩu không đúng!", token, null);

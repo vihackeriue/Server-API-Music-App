@@ -90,8 +90,8 @@ public class SongService implements ISongService {
         List<SongEntity> entities = songRepository.findAll();
         for(SongEntity item: entities){
             SongDTO songDTO = songConverter.toDTO(item);
-            songDTO.setUrl_audio("api/song/audio/"+ item.getId());
-            songDTO.setUrl_thumbnail("api/song/avatar/"+ item.getId());
+            songDTO.setUrl_audio("song/audio/"+ item.getId());
+            songDTO.setUrl_thumbnail("song/avatar/"+ item.getId());
             results.add(songDTO);
         }
         return results;
@@ -120,8 +120,8 @@ public class SongService implements ISongService {
 //                updateView(songDTO);
 //            }
             incrementViews(idsong, idUser);
-            songDTO.setUrl_audio("api/song/audio/"+ idsong);
-            songDTO.setUrl_thumbnail("api/song/avatar/"+ idsong);
+            songDTO.setUrl_audio("song/audio/"+ idsong);
+            songDTO.setUrl_thumbnail("song/avatar/"+ idsong);
 
             System.out.println(songEntity.getSongInteractions());
             return songDTO;
@@ -135,8 +135,8 @@ public class SongService implements ISongService {
         if(optionalSongEntity.isPresent()){
             SongEntity songEntity = optionalSongEntity.get();
             SongDTO songDTO = songConverter.toDTO(songEntity);
-            songDTO.setUrl_audio("api/song/audio/"+ idsong);
-            songDTO.setUrl_thumbnail("api/song/avatar/"+ idsong);
+            songDTO.setUrl_audio("song/audio/"+ idsong);
+            songDTO.setUrl_thumbnail("song/avatar/"+ idsong);
             return songDTO;
         }
         return null;
