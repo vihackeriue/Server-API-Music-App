@@ -200,47 +200,53 @@ public class SongAPI extends BaseAPI{
         songService.delete(ids);
     }
 
+
     @GetMapping("/song/recommend")
-    public RecommendSongOutput recommend(@RequestParam int userId) {
-        RecommendSongOutput recommendSongOutput = new RecommendSongOutput();
-        RestTemplate restTemplate = new RestTemplate();
-        String flaskApiUrl = "http://localhost:5000/recommend/" + userId ;
-        ResponseEntity<String> response = restTemplate.getForEntity(flaskApiUrl, String.class);
+    public  RecommendSongOutput recommend(HttpServletRequest request) {
+        final String token = request.getHeader("token");
+        Long userId = userService.findIDByEmail(token);
+        if(userId != -1){
+            RecommendSongOutput recommendSongOutput = new RecommendSongOutput();
+            RestTemplate restTemplate = new RestTemplate();
+            String flaskApiUrl = "http://localhost:5000/recommend/" + userId ;
+            ResponseEntity<String> response = restTemplate.getForEntity(flaskApiUrl, String.class);
 
 
-        ObjectMapper objectMapper = new ObjectMapper();
-        try {
-            JsonNode jsonNode = objectMapper.readTree(response.getBody());
-            JsonNode recommendedSongsViewNode = jsonNode.get("recommended_songs_view");
-            if (recommendedSongsViewNode != null) {
-                List<SongDTO> songs = new ArrayList<>();
+            ObjectMapper objectMapper = new ObjectMapper();
+            try {
+                JsonNode jsonNode = objectMapper.readTree(response.getBody());
+                JsonNode recommendedSongsViewNode = jsonNode.get("recommended_songs_view");
+                if (recommendedSongsViewNode != null) {
+                    List<SongDTO> songs = new ArrayList<>();
 //                long[] idSongRate = new long[recommendedSongsViewNode.size()];
 
-                // Duyệt qua các phần tử của recommendedSongsViewNode và chuyển đổi chúng thành kiểu dữ liệu long
-                for (int i = 0; i < recommendedSongsViewNode.size(); i++) {
+                    // Duyệt qua các phần tử của recommendedSongsViewNode và chuyển đổi chúng thành kiểu dữ liệu long
+                    for (int i = 0; i < recommendedSongsViewNode.size(); i++) {
 //                    idSongRate[i] = recommendedSongsViewNode.get(i).asLong();
-                    songs.add(songService.findByID(recommendedSongsViewNode.get(i).asLong()));
+                        songs.add(songService.findByID(recommendedSongsViewNode.get(i).asLong()));
+                    }
+                    recommendSongOutput.setRecommendedSongsView(songs);
                 }
-                recommendSongOutput.setRecommendedSongsView(songs);
-            }
 
-            JsonNode recommendedSongsRateNode = jsonNode.get("recommended_songs_rate");
-            if (recommendedSongsRateNode != null) {
-                List<SongDTO> songs = new ArrayList<>();
+                JsonNode recommendedSongsRateNode = jsonNode.get("recommended_songs_rate");
+                if (recommendedSongsRateNode != null) {
+                    List<SongDTO> songs = new ArrayList<>();
 //                long[] idSongRate = new long[recommendedSongsRateNode.size()];
 
-                // Duyệt qua các phần tử của recommendedSongsViewNode và chuyển đổi chúng thành kiểu dữ liệu long
-                for (int i = 0; i < recommendedSongsRateNode.size(); i++) {
+                    // Duyệt qua các phần tử của recommendedSongsViewNode và chuyển đổi chúng thành kiểu dữ liệu long
+                    for (int i = 0; i < recommendedSongsRateNode.size(); i++) {
 //                    idSongRate[i] = recommendedSongsViewNode.get(i).asLong();
-                    songs.add(songService.findByID(recommendedSongsViewNode.get(i).asLong()));
+                        songs.add(songService.findByID(recommendedSongsViewNode.get(i).asLong()));
+                    }
+                    recommendSongOutput.setRecommendedSongsRate(songs);
                 }
-                recommendSongOutput.setRecommendedSongsRate(songs);
+                System.out.println(recommendedSongsViewNode);
+            } catch (JsonProcessingException e) {
+                throw new RuntimeException(e);
             }
-            System.out.println(recommendedSongsViewNode);
-        } catch (JsonProcessingException e) {
-            throw new RuntimeException(e);
+            return recommendSongOutput;
         }
-        return recommendSongOutput;
+        return null;
     }
     @GetMapping("/song/list")
     public List<SongDTO> recommend(@RequestBody long[] ids){
