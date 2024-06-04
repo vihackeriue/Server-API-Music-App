@@ -91,10 +91,10 @@ public class PlaylistAPI extends BaseAPI{
     public ResponseEntity<?> addSongToPlaylist(@PathVariable Long playlistId, @PathVariable Long songId){
         BaseResponse baseRespons =playlistService.addSongToPlaylist(playlistId, songId);
         if(baseRespons.isSuccess()){
-            return ResponseEntity.ok(playlistService.addSongToPlaylist(playlistId, songId));
+            return ResponseEntity.ok(baseRespons);
 
         }else {
-            return ResponseEntity.badRequest().body(playlistService.addSongToPlaylist(playlistId, songId));
+            return ResponseEntity.badRequest().body(baseRespons);
         }
     }
     @DeleteMapping(value = "/playlist")
