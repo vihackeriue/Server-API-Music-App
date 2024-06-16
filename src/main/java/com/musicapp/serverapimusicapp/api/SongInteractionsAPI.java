@@ -22,6 +22,7 @@ public class SongInteractionsAPI extends BaseAPI{
 
         return songInteractionsService.save(songInteractionsDTO);
     }
+
     @GetMapping(value = "/song/rate/{id}")
     private List<SongInteractionsDTO> getRate(@PathVariable("id") Long idSong){
         return songInteractionsService.findByIdSong(idSong);

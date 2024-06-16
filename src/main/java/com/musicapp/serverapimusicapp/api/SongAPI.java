@@ -190,6 +190,12 @@ public class SongAPI extends BaseAPI{
             throw new RuntimeException(e);
         }
     }
+    @PostMapping(value = "/song/tool")
+    public  ResponseEntity<SongDTO>  createSong(@RequestBody SongDTO songDTO){
+        SongDTO savedSong = null;
+        savedSong = songService.save(songDTO);
+        return ResponseEntity.ok(savedSong);
+    }
     @PutMapping(value = "/song/{id}")
     public SongDTO updateSong(@RequestBody SongDTO songDTO, @PathVariable("id") Long id){
         songDTO.setId(id);
@@ -258,3 +264,4 @@ public class SongAPI extends BaseAPI{
     }
 
 }
+

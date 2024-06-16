@@ -45,8 +45,8 @@ public class SongConverter extends BaseConverter<SongDTO, SongEntity>{
         songDTO.setDescription(songEntity.getDescription());
         songDTO.setUrl_audio(songEntity.getUrl_audio());
         songDTO.setUrl_thumbnail(songEntity.getUrl_thumbnail());
-        songDTO.setViews(songEntity.getViews());
-        songDTO.setViews(songEntity.getViews());
+//        songDTO.setViews(songEntity.getViews());
+//        songDTO.setViews(songEntity.getViews());
         if(songEntity.getArtist() != null){
 //            songDTO.setArtistID(songEntity.getArtist().getId());
             songDTO.setArtistDTO(artistConverter.toDTO(songEntity.getArtist()));

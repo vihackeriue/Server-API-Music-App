@@ -43,6 +43,7 @@ public class ArtistAPI extends BaseAPI<ArtistDTO>{
 
     @PostMapping(value = "/artist")
     public ArtistDTO createArtist(@RequestBody ArtistDTO model){
+
         return artistService.save(model);
     }
     @PutMapping(value = "/artist/{id}")
